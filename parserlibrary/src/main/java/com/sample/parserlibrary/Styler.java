@@ -46,42 +46,42 @@ import java.util.ArrayList;
 
 public class Styler {
 
-    public static final int TAG_ALL = 0;
-    public static final int TAG_BOLD = 1;
-    public static final int TAG_ITALIC = 2;
-    public static final int TAG_UNDERLINE = 3;
-    public static final int TAG_CODE = 4;
-    public static final int TAG_TABLE_HEAD = 5;
-    public static final int TAG_SUP = 6;
-    public static final int TAG_SUB = 7;
+    static final int TAG_ALL = 0;
+    static final int TAG_BOLD = 1;
+    static final int TAG_ITALIC = 2;
+    static final int TAG_UNDERLINE = 3;
+    static final int TAG_CODE = 4;
+    static final int TAG_TABLE_HEAD = 5;
+    static final int TAG_SUP = 6;
+    static final int TAG_SUB = 7;
     private float dpToPixelFactorValue = 0;
-    public boolean boldTagOpen = false, italicTagOpen = false, timeTagOpen = false,
+    boolean boldTagOpen = false, italicTagOpen = false, timeTagOpen = false,
             codeTagOpen = false, preTagOpen = false, supTagOpen = false, subTagOpen = false;
-    public int anchorTagStart = -1, anchorTagEnd = -1;
-    public int boldTagStart = -1, boldTagEnd = -1;
-    public int italicTagStart = -1, italicTagEnd = -1;
-    public int underlineTagStart = -1, underlineTagEnd = -1;
-    public int codeTagStart = -1, codeTagEnd = -1;
-    public int supTagStart = -1, supTagEnd = -1;
-    public int subTagStart = -1, subTagEnd = -1;
-    public int tHeadTagStart = -1, tHeadTagEnd = -1;
-    public ArrayList<TagAttribute> anchorTagAttributes = null;
+    int anchorTagStart = -1, anchorTagEnd = -1;
+    int boldTagStart = -1, boldTagEnd = -1;
+    int italicTagStart = -1, italicTagEnd = -1;
+    int underlineTagStart = -1, underlineTagEnd = -1;
+    int codeTagStart = -1, codeTagEnd = -1;
+    int supTagStart = -1, supTagEnd = -1;
+    int subTagStart = -1, subTagEnd = -1;
+    int tHeadTagStart = -1, tHeadTagEnd = -1;
+    ArrayList<TagAttribute> anchorTagAttributes = null;
 
-    public Styler(float value) {
+    Styler(float value) {
         this.dpToPixelFactorValue = value;
     }
 
-    public float getDpToPixelFactorValue() {
+    float getDpToPixelFactorValue() {
         return dpToPixelFactorValue;
     }
 
-    public SpannableStringBuilder appendFormattedCharacter(SpannableStringBuilder text,
+    SpannableStringBuilder appendFormattedCharacter(SpannableStringBuilder text,
                                                            char character) {
         text.append(character);
         return text;
     }
 
-    public void resetSpan(int type) {
+    void resetSpan(int type) {
         switch (type) {
             case TAG_ALL :
                 anchorTagStart = -1;
@@ -460,17 +460,7 @@ public class Styler {
             if (Preferences.mNightModeDisplay) {
                 this.setBackgroundResource(R.drawable.bg_header_tag_night);
             } else {
-                if (Preferences.mBackgroundColorOption == 1) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color1);
-                } else if (Preferences.mBackgroundColorOption == 2) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color2);
-                } else if (Preferences.mBackgroundColorOption == 3) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color3);
-                } else if (Preferences.mBackgroundColorOption == 4) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color4);
-                } else if (Preferences.mBackgroundColorOption == 5) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color5);
-                }
+                this.setBackgroundResource(R.drawable.bg_header_tag_normal_color1);
             }
             this.setTextColor(Preferences.mTextColorHeader);
             this.setPadding(0, (int) (20 * dpToPixelFactorValue)
@@ -506,17 +496,7 @@ public class Styler {
             if (Preferences.mNightModeDisplay) {
                 this.setBackgroundResource(R.drawable.bg_header_tag_night);
             } else {
-                if (Preferences.mBackgroundColorOption == 1) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color1);
-                } else if (Preferences.mBackgroundColorOption == 2) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color2);
-                } else if (Preferences.mBackgroundColorOption == 3) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color3);
-                } else if (Preferences.mBackgroundColorOption == 4) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color4);
-                } else if (Preferences.mBackgroundColorOption == 5) {
-                    this.setBackgroundResource(R.drawable.bg_header_tag_normal_color5);
-                }
+                this.setBackgroundResource(R.drawable.bg_header_tag_normal_color1);
             }
             this.setTextColor(Preferences.mTextColorHeader);
             switch (tagName.charAt(1)) {
