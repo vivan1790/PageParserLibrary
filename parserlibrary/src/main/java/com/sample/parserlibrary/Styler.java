@@ -460,7 +460,7 @@ public class Styler {
             if (Preferences.mNightModeDisplay) {
                 this.setBackgroundResource(R.drawable.bg_header_tag_night);
             } else {
-                this.setBackgroundResource(R.drawable.bg_header_tag_normal_color1);
+                this.setBackgroundResource(R.drawable.bg_header_tag_normal);
             }
             this.setTextColor(Preferences.mTextColorHeader);
             this.setPadding(0, (int) (20 * dpToPixelFactorValue)
@@ -496,7 +496,7 @@ public class Styler {
             if (Preferences.mNightModeDisplay) {
                 this.setBackgroundResource(R.drawable.bg_header_tag_night);
             } else {
-                this.setBackgroundResource(R.drawable.bg_header_tag_normal_color1);
+                this.setBackgroundResource(R.drawable.bg_header_tag_normal);
             }
             this.setTextColor(Preferences.mTextColorHeader);
             switch (tagName.charAt(1)) {
@@ -569,7 +569,7 @@ public class Styler {
             this.context = context;
             this.attributes = attributes;
             this.subjectURL = subjectURL;
-            this.setBackgroundResource(R.drawable.bg_selector);
+            //this.setBackgroundResource(R.drawable.bg_selector);
             this.setClickable(true);
             String imageURL = "";
             int num = attributes.size();
@@ -590,7 +590,7 @@ public class Styler {
             this.context = context;
             this.mImageURL = imageURL;
             this.subjectURL = subjectURL;
-            this.setBackgroundResource(R.drawable.bg_selector);
+            //this.setBackgroundResource(R.drawable.bg_selector);
             this.setClickable(true);
             Picasso.get().load(imageURL).into(this);
         }
