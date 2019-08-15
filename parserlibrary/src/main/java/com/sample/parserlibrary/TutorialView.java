@@ -20,6 +20,9 @@ import java.util.Stack;
 
 public class TutorialView extends LinearLayout {
 
+
+    final String YOUTUBE_API_KEY = "AIzaSyDph-whisa8me0VEKQ0yUgbO5haK_VRjv0";
+
     private Styler styler;
     private SyntaxHandler syntaxHandler;
     private String initialTag = "";
@@ -531,7 +534,7 @@ public class TutorialView extends LinearLayout {
                 lp.setMarginStart((int) (12 * styler.getDpToPixelFactorValue()));
                 lp.setMarginEnd((int) (12 * styler.getDpToPixelFactorValue()));
                 youTubePlayerView.setLayoutParams(lp);
-                youTubePlayerView.initialize(Constants.STUDYTONIGHT_YOUTUBE_API_KEY,
+                youTubePlayerView.initialize(YOUTUBE_API_KEY,
                         new YouTubePlayer.OnInitializedListener() {
                     @Override
                     public void onInitializationSuccess(YouTubePlayer.Provider provider,

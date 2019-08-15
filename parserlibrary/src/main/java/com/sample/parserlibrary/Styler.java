@@ -42,7 +42,6 @@ import android.widget.TableRow;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class Styler {
@@ -602,25 +601,7 @@ public class Styler {
                     return;
                 }
             }
-            if (Utils.isNetworkConnected(context)) {
-                if (!imageURL.contains("http:")) {
-                    imageURL = Constants.STUDYTONIGHT_WEBSITE_URL
-                            + '/' + subjectURL + '/' + imageURL;
-                    this.mImageURL = imageURL;
-                }
-                if (imageURL.contains("/css")) {
-                    this.setVisibility(View.GONE);
-                }
-                Picasso.get().load(imageURL).into(this);
-            } else {
-                File file = new File(context.getFilesDir().getAbsolutePath()
-                        + '/' + subjectURL + '/' + imageURL);
-                if (file.exists()) {
-                    Picasso.get().load(Uri.fromFile(file)).into(this);
-                } else {
-                    this.setVisibility(View.GONE);
-                }
-            }
+            Picasso.get().load(imageURL).into(this);
         }
 
         public ImageTagView(Context context, String imageURL,
@@ -631,25 +612,7 @@ public class Styler {
             this.subjectURL = subjectURL;
             this.setBackgroundResource(R.drawable.bg_selector);
             this.setClickable(true);
-            if (Utils.isNetworkConnected(context)) {
-                if (!imageURL.contains("http:")) {
-                    imageURL = Constants.STUDYTONIGHT_WEBSITE_URL
-                            + '/' + subjectURL + '/' + imageURL;
-                    this.mImageURL = imageURL;
-                }
-                if (imageURL.contains("/css")) {
-                    this.setVisibility(View.GONE);
-                }
-                Picasso.get().load(imageURL).into(this);
-            } else {
-                File file = new File(context.getFilesDir().getAbsolutePath()
-                        + '/' + subjectURL + '/' + imageURL);
-                if (file.exists()) {
-                    Picasso.get().load(Uri.fromFile(file)).into(this);
-                } else {
-                    this.setVisibility(View.GONE);
-                }
-            }
+            Picasso.get().load(imageURL).into(this);
         }
 
         public String getImageURL() {
@@ -932,8 +895,7 @@ public class Styler {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(Constants.STUDYTONIGHT_WEBSITE_URL
-                                            + Styler.CustomURLSpan.this.mURL));
+                            Uri.parse(Styler.CustomURLSpan.this.mURL));
                     context.startActivity(browserIntent);
                 }
             });
