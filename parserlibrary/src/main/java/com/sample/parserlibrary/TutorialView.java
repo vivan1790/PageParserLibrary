@@ -108,7 +108,7 @@ public class TutorialView extends LinearLayout {
         this.removeAllViews();
     }
 
-    private void parseHTML(String htmlText) {
+    public void parseHTML(String htmlText) {
         if (htmlText == null) {
             return;
         }
