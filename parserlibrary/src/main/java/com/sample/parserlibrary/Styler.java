@@ -563,6 +563,25 @@ public class Styler {
         String subjectURL;
         String mImageURL = null;
 
+        public ImageTagView(Context context, ArrayList<TagAttribute> attributes) {
+            super(context);
+            this.context = context;
+            this.attributes = attributes;
+            //this.setBackgroundResource(R.drawable.bg_selector);
+            this.setClickable(true);
+            String imageURL = "";
+            int num = attributes.size();
+            for (int i = 0; i < num; i++) {
+                if (attributes.get(i).getAttributeName().equals("src")) {
+                    imageURL = attributes.get(i).getAttributeValue();
+                } else if (attributes.get(i).getAttributeName().equals("data-cfsrc")) {
+                    this.setVisibility(View.GONE);
+                    return;
+                }
+            }
+            Picasso.get().load(imageURL).into(this);
+        }
+
         public ImageTagView(Context context, ArrayList<TagAttribute> attributes,
                             String subjectURL) {
             super(context);

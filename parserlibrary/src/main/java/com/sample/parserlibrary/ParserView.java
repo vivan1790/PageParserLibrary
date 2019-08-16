@@ -18,15 +18,14 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class TutorialView extends LinearLayout {
-
+public class ParserView extends LinearLayout {
 
     final String YOUTUBE_API_KEY = "AIzaSyDph-whisa8me0VEKQ0yUgbO5haK_VRjv0";
 
     private Styler styler;
     private SyntaxHandler syntaxHandler;
-    private String initialTag = "";
-    private String textToStartFrom = "";
+    private String initialTag = "body";
+    private String textToStartFrom = "<body";
     private Context context;
     private Stack<Tag> stack;
     boolean tagStart = false, tagEnd = false, comment = false, ignorable = false,
@@ -35,10 +34,10 @@ public class TutorialView extends LinearLayout {
     SpannableStringBuilder text = new SpannableStringBuilder("");
     int text_len = 0;
     char lastCharacter = 0;
-    String mTopicURL = "", mSubjectURL = null, pagerPrevURL = null, pagerNextURL = null;
+    //String mTopicURL = "", mSubjectURL = null, pagerPrevURL = null, pagerNextURL = null;
     YouTubeVideoPlayListener mYouTubeVideoPlayListener = null;
 
-    public TutorialView(Context context) {
+    public ParserView(Context context) {
         super(context);
         this.setOrientation(LinearLayout.VERTICAL);
         this.context = context;
@@ -50,7 +49,7 @@ public class TutorialView extends LinearLayout {
         syntaxHandler = new SyntaxHandler();
     }
 
-    public TutorialView(Context context, AttributeSet attrs) {
+    public ParserView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setOrientation(LinearLayout.VERTICAL);
         this.context = context;
@@ -62,7 +61,7 @@ public class TutorialView extends LinearLayout {
         syntaxHandler = new SyntaxHandler();
     }
 
-    public TutorialView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ParserView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setOrientation(LinearLayout.VERTICAL);
         this.context = context;
@@ -80,8 +79,8 @@ public class TutorialView extends LinearLayout {
 
     public void loadURLContent(String subjectURL, String topicURL, String content,
                                String initialTag, String textToStartFrom) {
-        this.mSubjectURL = subjectURL;
-        this.mTopicURL = topicURL;
+        //this.mSubjectURL = subjectURL;
+        //this.mTopicURL = topicURL;
         if (initialTag == null) {
             this.initialTag = "body";
         } else {
@@ -95,13 +94,13 @@ public class TutorialView extends LinearLayout {
         parseHTML(content);
     }
 
-    public String getSubjectURL() {
+    /*public String getSubjectURL() {
         return mSubjectURL;
     }
 
     public String getTopicURL() {
         return mTopicURL;
-    }
+    }*/
 
     public void clear() {
         this.removeAllViewsInLayout();
@@ -112,8 +111,8 @@ public class TutorialView extends LinearLayout {
         if (htmlText == null) {
             return;
         }
-        int start = htmlText.indexOf(textToStartFrom);
-        int index = start;
+        //int start = htmlText.indexOf(textToStartFrom);
+        int index = htmlText.indexOf(textToStartFrom);
         char character, nextCharacter;
         while (true) {
             character = htmlText.charAt(index);
@@ -417,7 +416,7 @@ public class TutorialView extends LinearLayout {
         }
         if (tagName.equals("a")) {
             if (!endsStraightAway) {
-                styler.anchorTagStart = text_len;
+                /*styler.anchorTagStart = text_len;
                 styler.anchorTagAttributes = attributes;
                 String url = "";
                 int num = attributes.size();
@@ -435,7 +434,7 @@ public class TutorialView extends LinearLayout {
                 } else {
                     pagerPrevURL = null;
                     pagerNextURL = null;
-                }
+                }*/
             }
         } else if (tagName.equals("article")) {
             insertTextView();
@@ -517,7 +516,7 @@ public class TutorialView extends LinearLayout {
                 }
             }
             if (url.contains("www.youtube.com")) {
-                String code = "";
+                String code;
                 if (url.contains("/embed/")) {
                     int start = url.indexOf("/embed/") + 7;
                     int end = url.indexOf('?', start);
@@ -584,7 +583,7 @@ public class TutorialView extends LinearLayout {
                 }
             } else {
                 Styler.IFrameTagView iFrameWebView = styler.new IFrameTagView(
-                        context, attributes, TutorialView.this.getMeasuredWidth());
+                        context, attributes, ParserView.this.getMeasuredWidth());
                 iFrameWebView.setLayoutParams(new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 iFrameWebView.getSettings().setLoadWithOverviewMode(true);
@@ -600,7 +599,7 @@ public class TutorialView extends LinearLayout {
         } else if (tagName.equals("img")) {
             insertTextView();
             final Styler.ImageTagView imageView =
-                    styler.new ImageTagView(context, attributes, mSubjectURL);
+                    styler.new ImageTagView(context, attributes/*, mSubjectURL*/);
             imageView.setLayoutParams(
                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -794,7 +793,7 @@ public class TutorialView extends LinearLayout {
             View topView = tagOnTopOfStack.view;
             if (topView instanceof ViewGroup && tagOnTopOfStack.name.equals(tagName)) {
                 if (tagName.equals(initialTag) && stack.size() == 0) {
-                    TutorialView.this.addView(topView);
+                    ParserView.this.addView(topView);
                 } else {
                     Tag containerTagOfTopView = stack.peek();
                     if (containerTagOfTopView.view instanceof ViewGroup) {
