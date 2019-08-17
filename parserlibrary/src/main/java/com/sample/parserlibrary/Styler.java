@@ -232,7 +232,7 @@ public class Styler {
         return text;
     }
 
-    public class BaseTextView extends android.support.v7.widget.AppCompatTextView {
+    public class BaseTextView extends androidx.appcompat.widget.AppCompatTextView {
         public BaseTextView(Context context) {
             super(context);
             this.setTextIsSelectable(true);
@@ -320,7 +320,7 @@ public class Styler {
         }
     }
 
-    public class QuestionOptionRadioButton extends android.support.v7.widget.AppCompatRadioButton {
+    public class QuestionOptionRadioButton extends androidx.appcompat.widget.AppCompatRadioButton {
         Context context;
         public QuestionOptionRadioButton(Context context) {
             super(context);
@@ -557,13 +557,15 @@ public class Styler {
             }
             //this.loadUrl(url);
             this.getSettings().setDisplayZoomControls(true);
+            this.getSettings().setSupportZoom(true);
+            this.getSettings().setBuiltInZoomControls(true);
             String content = "<html><body><iframe width=\"" + frameWidth + "\" height=\""
                     + frameHeight + "\" src=\"" + url + "\"></body></html>";
             this.loadData(content, "text/html", "utf-8");
         }
     }
 
-    public class ImageTagView extends android.support.v7.widget.AppCompatImageView {
+    public class ImageTagView extends androidx.appcompat.widget.AppCompatImageView {
         ArrayList<TagAttribute> attributes;
         Context context;
         String subjectURL;
