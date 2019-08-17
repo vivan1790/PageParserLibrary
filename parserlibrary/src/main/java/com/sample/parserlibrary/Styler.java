@@ -556,6 +556,7 @@ public class Styler {
                         / (Double.parseDouble(width))));
             }
             //this.loadUrl(url);
+            this.getSettings().setDisplayZoomControls(true);
             String content = "<html><body><iframe width=\"" + frameWidth + "\" height=\""
                     + frameHeight + "\" src=\"" + url + "\"></body></html>";
             this.loadData(content, "text/html", "utf-8");
