@@ -548,8 +548,13 @@ public class Styler {
             this.getSettings().setJavaScriptEnabled(true);
             this.setWebViewClient(new WebViewClient());
             int frameWidth = screenWidth - (int) (60 * dpToPixelFactorValue);
-            int frameHeight = (int) (frameWidth * ((Double.parseDouble(height))
-                    / (Double.parseDouble(width))));
+            int frameHeight = 0;
+            if ("100%".equals(width)) {
+                frameHeight = Integer.parseInt(height);
+            } else {
+                frameHeight = (int) (frameWidth * ((Double.parseDouble(height))
+                        / (Double.parseDouble(width))));
+            }
             //this.loadUrl(url);
             String content = "<html><body><iframe width=\"" + frameWidth + "\" height=\""
                     + frameHeight + "\" src=\"" + url + "\"></body></html>";
