@@ -30,6 +30,7 @@ import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -525,15 +526,21 @@ public class Styler {
         }
     }
 
-    public class IFrameTagView extends WebView {
+    public class IFrameTagView extends LinearLayout {
         ArrayList<TagAttribute> attributes;
         Context context;
+
+        private WebView webview;
+        private View fullScreenButton;
 
         @SuppressLint("SetJavaScriptEnabled")
         public IFrameTagView(Context context, ArrayList<TagAttribute> attributes, int screenWidth) {
             super(context);
             this.context = context;
             this.attributes = attributes;
+            View view = LayoutInflater.from(context).inflate(R.layout.layout_iframe, this, true);
+            webview = view.findViewById(R.id.web_view);
+            fullScreenButton = view.findViewById(R.id.full_screen_button);
             String url = "", width = "", height = "";
             int num = attributes.size();
             for (int i = 0; i < num; i++) {
@@ -545,8 +552,8 @@ public class Styler {
                     height = attributes.get(i).getAttributeValue();
                 }
             }
-            this.getSettings().setJavaScriptEnabled(true);
-            this.setWebViewClient(new WebViewClient());
+            webview.getSettings().setJavaScriptEnabled(true);
+            webview.setWebViewClient(new WebViewClient());
             int frameWidth = screenWidth - (int) (60 * dpToPixelFactorValue);
             int frameHeight = 0;
             if ("100%".equals(width)) {
@@ -556,12 +563,22 @@ public class Styler {
                         / (Double.parseDouble(width))));
             }
             //this.loadUrl(url);
-            this.getSettings().setDisplayZoomControls(true);
-            this.getSettings().setSupportZoom(true);
-            this.getSettings().setBuiltInZoomControls(true);
-            String content = "<html><body><iframe width=\"" + frameWidth + "\" height=\""
+            /*webview.getSettings().setDisplayZoomControls(true);
+            webview.getSettings().setSupportZoom(true);
+            webview.getSettings().setBuiltInZoomControls(true);*/
+            webview.getSettings().setLoadWithOverviewMode(true);
+            webview.getSettings().setUseWideViewPort(true);
+            final String content = "<html><body><iframe width=\"" + frameWidth + "\" height=\""
                     + frameHeight + "\" src=\"" + url + "\"></body></html>";
-            this.loadData(content, "text/html", "utf-8");
+            webview.loadData(content, "text/html", "utf-8");
+            fullScreenButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = WebViewActivity.getCallIntent(view.getContext());
+                    intent.putExtra("LOAD_DATA", content);
+                    view.getContext().startActivity(intent);
+                }
+            });
         }
     }
 

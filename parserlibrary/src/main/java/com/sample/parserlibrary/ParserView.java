@@ -586,8 +586,8 @@ public class ParserView extends LinearLayout {
                         context, attributes, ParserView.this.getMeasuredWidth());
                 iFrameWebView.setLayoutParams(new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                iFrameWebView.getSettings().setLoadWithOverviewMode(true);
-                iFrameWebView.getSettings().setUseWideViewPort(true);
+                /*iFrameWebView.getSettings().setLoadWithOverviewMode(true);
+                iFrameWebView.getSettings().setUseWideViewPort(true);*/
                 View topContainerView = stack.peek().view;
                 if (topContainerView instanceof LinearLayout) {
                     ((LinearLayout) topContainerView).addView(iFrameWebView);

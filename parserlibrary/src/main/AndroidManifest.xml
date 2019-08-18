@@ -2,4 +2,10 @@
     package="com.sample.parserlibrary" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application>
+        <activity android:name=".ImagePreviewActivity" android:theme="@style/MainTheme"/>
+        <activity android:name=".WebViewActivity" android:theme="@style/MainTheme"/>
+    </application>
+
 </manifest>
