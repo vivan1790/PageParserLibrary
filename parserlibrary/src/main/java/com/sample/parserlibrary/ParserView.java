@@ -359,7 +359,8 @@ public class ParserView extends LinearLayout {
             }
             if (text_len > 0) {
                 View topContainerView = stack.peek().view;
-                if (topContainerView instanceof LinearLayout) {
+                if (topContainerView instanceof LinearLayout
+                        && text.toString().trim().length() > 0) {
                     ((LinearLayout) topContainerView).addView(topTextView);
                     /*if (toBeAdded) {
                         View v = new ImageView(context);
@@ -448,6 +449,10 @@ public class ParserView extends LinearLayout {
                     styler.new ContainerTextView(context, tagName, attributes);
             stack.push(new Tag("", null, textView));
         } else if (tagName.equals("b")) {
+            if (!endsStraightAway) {
+                styler.boldTagStart = text_len;
+            }
+        } else if (tagName.equals("strong")) {
             if (!endsStraightAway) {
                 styler.boldTagStart = text_len;
             }
@@ -748,6 +753,9 @@ public class ParserView extends LinearLayout {
             //text = styler.putURL(text, context);
             //toBeAdded = true;
         } else if (tagName.equals("b")) {
+            styler.boldTagEnd = text_len;
+            text = styler.applySpanOnText(Styler.TAG_BOLD, text);
+        } else if (tagName.equals("strong")) {
             styler.boldTagEnd = text_len;
             text = styler.applySpanOnText(Styler.TAG_BOLD, text);
         } else if (tagName.equals("i")) {

@@ -36,10 +36,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -662,23 +664,13 @@ public class Styler {
         public ListItemContainerView(Context context, String serialText, View contentView) {
             super(context);
             this.context = context;
-            this.setOrientation(LinearLayout.HORIZONTAL);
-            LayoutParams params1 = new LayoutParams((int) (24 * Utils.mDpToPixelFactor),
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            LayoutParams params2 = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            params2.setMargins((int) (6 * Utils.mDpToPixelFactor), 0, 0, 0);
-            BaseTextView serialTextView = new BaseTextView(context);
-            serialTextView.setTextSize(Utils.TEXT_SIZE_NORMAL * Preferences.mTextScaleFactor);
-            serialTextView.setTextColor(Preferences.mTextColorNormal);
-            serialTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-            if (serialText != null) {
-                serialTextView.setText(serialText);
-            }
-            serialTextView.setLayoutParams(params1);
-            contentView.setLayoutParams(params2);
-            this.addView(serialTextView);
-            this.addView(contentView);
+            View view = LayoutInflater.from(context).inflate(R.layout.layout_li, this, true);
+            TextView itemIndexView = view.findViewById(R.id.item_index_view);
+            FrameLayout itemContainerView = view.findViewById(R.id.item_container_view);
+            itemIndexView.setTextSize(Utils.TEXT_SIZE_NORMAL * Preferences.mTextScaleFactor);
+            itemIndexView.setTextColor(Preferences.mTextColorNormal);
+            itemIndexView.setText(serialText);
+            itemContainerView.addView(contentView);
         }
     }
 
@@ -766,6 +758,7 @@ public class Styler {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             this.setLayoutParams(params);
+            this.setShrinkAllColumns(true);
         }
 
         @Override
