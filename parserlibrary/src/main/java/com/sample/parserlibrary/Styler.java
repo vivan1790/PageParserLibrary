@@ -532,26 +532,27 @@ public class Styler {
         ArrayList<TagAttribute> attributes;
         Context context;
 
-        private WebView webview;
-        private View fullScreenButton;
-
         @SuppressLint("SetJavaScriptEnabled")
         public IFrameTagView(Context context, ArrayList<TagAttribute> attributes, int screenWidth) {
             super(context);
             this.context = context;
             this.attributes = attributes;
             View view = LayoutInflater.from(context).inflate(R.layout.layout_iframe, this, true);
-            webview = view.findViewById(R.id.web_view);
-            fullScreenButton = view.findViewById(R.id.full_screen_button);
+            WebView webview = view.findViewById(R.id.web_view);
+            View fullScreenButton = view.findViewById(R.id.full_screen_button);
             String url = "", width = "", height = "";
             int num = attributes.size();
             for (int i = 0; i < num; i++) {
-                if (attributes.get(i).getAttributeName().equals("src")) {
-                    url = attributes.get(i).getAttributeValue();
-                } else if (attributes.get(i).getAttributeName().equals("width")) {
-                    width = attributes.get(i).getAttributeValue();
-                } else if (attributes.get(i).getAttributeName().equals("height")) {
-                    height = attributes.get(i).getAttributeValue();
+                switch (attributes.get(i).getAttributeName()) {
+                    case "src":
+                        url = attributes.get(i).getAttributeValue();
+                        break;
+                    case "width":
+                        width = attributes.get(i).getAttributeValue();
+                        break;
+                    case "height":
+                        height = attributes.get(i).getAttributeValue();
+                        break;
                 }
             }
             webview.getSettings().setJavaScriptEnabled(true);
@@ -565,9 +566,11 @@ public class Styler {
                         / (Double.parseDouble(width))));
             }
             //this.loadUrl(url);
-            /*webview.getSettings().setDisplayZoomControls(true);
+            /*
+            webview.getSettings().setDisplayZoomControls(true);
             webview.getSettings().setSupportZoom(true);
-            webview.getSettings().setBuiltInZoomControls(true);*/
+            webview.getSettings().setBuiltInZoomControls(true);
+            */
             webview.getSettings().setLoadWithOverviewMode(true);
             webview.getSettings().setUseWideViewPort(true);
             final String content = "<html><body><iframe width=\"" + frameWidth + "\" height=\""
@@ -758,7 +761,7 @@ public class Styler {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             this.setLayoutParams(params);
-            this.setShrinkAllColumns(true);
+            //this.setShrinkAllColumns(true);
         }
 
         @Override
@@ -777,6 +780,14 @@ public class Styler {
                 ((TableRow) getChildAt(i)).setWeightSum(weightSum);
                 getChildAt(i).requestLayout();
             }
+
+            /* Second call for super.onMeasure() is important here and is a work-around solution
+             * for showing table properly. Same can be achieved by setShrinkAllColumns() method of
+             * TableLayout, but if content of a column is relatively tiny, then it gives problem.
+             * In this work-around solution, first call measures all the width and second call
+             * helps in distributing the weights properly.
+             */
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
@@ -822,11 +833,6 @@ public class Styler {
             TableLayout.LayoutParams params = new TableLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             this.setLayoutParams(params);
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
