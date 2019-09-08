@@ -8,22 +8,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.LineBackgroundSpan;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
@@ -55,8 +48,8 @@ public class Styler {
     static final int TAG_UNDERLINE = 3;
     static final int TAG_CODE = 4;
     static final int TAG_TABLE_HEAD = 5;
-    static final int TAG_SUP = 6;
-    static final int TAG_SUB = 7;
+    private static final int TAG_SUP = 6;
+    private static final int TAG_SUB = 7;
     private float dpToPixelFactorValue = 0;
     boolean boldTagOpen = false, italicTagOpen = false, timeTagOpen = false,
             codeTagOpen = false, preTagOpen = false, supTagOpen = false, subTagOpen = false;
@@ -65,10 +58,10 @@ public class Styler {
     int italicTagStart = -1, italicTagEnd = -1;
     int underlineTagStart = -1, underlineTagEnd = -1;
     int codeTagStart = -1, codeTagEnd = -1;
-    int supTagStart = -1, supTagEnd = -1;
-    int subTagStart = -1, subTagEnd = -1;
+    private int supTagStart = -1, supTagEnd = -1;
+    private int subTagStart = -1, subTagEnd = -1;
     int tHeadTagStart = -1, tHeadTagEnd = -1;
-    ArrayList<TagAttribute> anchorTagAttributes = null;
+    private ArrayList<TagAttribute> anchorTagAttributes = null;
 
     Styler(float value) {
         this.dpToPixelFactorValue = value;
@@ -136,7 +129,7 @@ public class Styler {
         }
     }
 
-    public SpannableStringBuilder applySpanOnText(int type, SpannableStringBuilder text) {
+    SpannableStringBuilder applySpanOnText(int type, SpannableStringBuilder text) {
         switch (type) {
             case TAG_BOLD :
                 if (boldTagStart >= 0 && boldTagEnd >= 0) {
@@ -213,7 +206,7 @@ public class Styler {
         return text;
     }
 
-    public SpannableStringBuilder putURL(SpannableStringBuilder text, Context context) {
+    /*public SpannableStringBuilder putURL(SpannableStringBuilder text, Context context) {
         String url = "", target = "";
         int num = anchorTagAttributes.size();
         for (int i = 0; i < num; i++) {
@@ -233,7 +226,7 @@ public class Styler {
         anchorTagEnd = -1;
         anchorTagAttributes = null;
         return text;
-    }
+    }*/
 
     public class BaseTextView extends androidx.appcompat.widget.AppCompatTextView {
         public BaseTextView(Context context) {
@@ -273,7 +266,7 @@ public class Styler {
         }
     }
 
-    public class QuestionParentDivTagView extends LinearLayout {
+    /*public class QuestionParentDivTagView extends LinearLayout {
         Context context;
         int questionNumber;
         public QuestionParentDivTagView(Context context, int quesNum) {
@@ -288,7 +281,7 @@ public class Styler {
         public int getQuestionNumber() {
             return questionNumber;
         }
-    }
+    }*/
 
     public class QuestionContainerTextView extends BaseTextView {
         Context context;
@@ -417,8 +410,6 @@ public class Styler {
             }
             switch (classAttributeValue) {
                 case "note-buttons":
-                    this.setVisibility(View.GONE);
-                    break;
                 case "tags":
                     this.setVisibility(View.GONE);
                     break;
@@ -558,7 +549,7 @@ public class Styler {
             webview.getSettings().setJavaScriptEnabled(true);
             webview.setWebViewClient(new WebViewClient());
             int frameWidth = screenWidth - (int) (60 * dpToPixelFactorValue);
-            int frameHeight = 0;
+            int frameHeight;
             if ("100%".equals(width)) {
                 frameHeight = Integer.parseInt(height);
             } else {
@@ -590,8 +581,7 @@ public class Styler {
     public class ImageTagView extends androidx.appcompat.widget.AppCompatImageView {
         ArrayList<TagAttribute> attributes;
         Context context;
-        String subjectURL;
-        String mImageURL = null;
+        //String mImageURL = null;
 
         public ImageTagView(Context context, ArrayList<TagAttribute> attributes) {
             super(context);
@@ -612,7 +602,7 @@ public class Styler {
             Picasso.get().load(imageURL).into(this);
         }
 
-        public ImageTagView(Context context, ArrayList<TagAttribute> attributes,
+        /*public ImageTagView(Context context, ArrayList<TagAttribute> attributes,
                             String subjectURL) {
             super(context);
             this.context = context;
@@ -646,7 +636,7 @@ public class Styler {
 
         public String getImageURL() {
             return mImageURL;
-        }
+        }*/
     }
 
     public class ListIndexTagView extends LinearLayout {
@@ -860,7 +850,7 @@ public class Styler {
         }
     }
 
-    private class CodeBackgroundSpan implements LineBackgroundSpan {
+    /*private class CodeBackgroundSpan implements LineBackgroundSpan {
 
         int backgroundColor = 0;
         int padding = 0;
@@ -878,19 +868,19 @@ public class Styler {
                                    CharSequence text, int start, int end, int lnum) {
             final int textWidth = Math.round(paint.measureText(text, start, end));
             final int paintColor = paint.getColor();
-            /*rect.set(left - padding,
+            *//*rect.set(left - padding,
                 top - (lnum == 0 ? padding / 2 : - (padding / 2)),
                 left + textWidth + padding,
-                bottom + padding / 2);*/
+                bottom + padding / 2);*//*
             rect.set(left, top, left + textWidth, bottom);
             rect.inset(-40, 0);
             paint.setColor(backgroundColor);
             canvas.drawRect(rect, paint);
             //paint.setColor(paintColor);
         }
-    }
+    }*/
 
-    public class CustomURLSpan extends URLSpan {
+    /*public class CustomURLSpan extends URLSpan {
 
         String mURL;
         Context context;
@@ -911,7 +901,9 @@ public class Styler {
                             context.getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip =
                             ClipData.newPlainText("url_text", Styler.CustomURLSpan.this.mURL);
-                    clipboard.setPrimaryClip(clip);
+                    if (clipboard != null) {
+                        clipboard.setPrimaryClip(clip);
+                    }
                 }
             });
             builder.setPositiveButton("Open browser", new DialogInterface.OnClickListener() {
@@ -928,9 +920,9 @@ public class Styler {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.show();
         }
-    }
+    }*/
 
-    public class CodeTagSpan extends ReplacementSpan {
+    /*public class CodeTagSpan extends ReplacementSpan {
         private static final float PADDING = 30.0f;
         private RectF mRect;
         private int mBackgroundColor;
@@ -963,6 +955,6 @@ public class Styler {
                            int start, int end, Paint.FontMetricsInt fm) {
             return Math.round(paint.measureText(text, start, end) + PADDING);
         }
-    }
+    }*/
 
 }

@@ -1,19 +1,21 @@
 package com.sample.parserlibrary;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -521,7 +523,7 @@ public class ParserView extends LinearLayout {
                 }
             }
             if (url.contains("www.youtube.com")) {
-                String code;
+                final String code;
                 if (url.contains("/embed/")) {
                     int start = url.indexOf("/embed/") + 7;
                     int end = url.indexOf('?', start);
@@ -531,60 +533,15 @@ public class ParserView extends LinearLayout {
                     code = url.substring(start);
                 }
                 final String videoCode = code;
-                YouTubePlayerView youTubePlayerView = new YouTubePlayerView(context);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMarginStart((int) (12 * styler.getDpToPixelFactorValue()));
-                lp.setMarginEnd((int) (12 * styler.getDpToPixelFactorValue()));
-                youTubePlayerView.setLayoutParams(lp);
-                youTubePlayerView.initialize(YOUTUBE_API_KEY,
-                        new YouTubePlayer.OnInitializedListener() {
-                    @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
-                                                        YouTubePlayer youTubePlayer, boolean b) {
-                        if (!b) {
-                            youTubePlayer.cueVideo(videoCode);
-                            youTubePlayer.setPlaybackEventListener(
-                                    new YouTubePlayer.PlaybackEventListener() {
-                                @Override
-                                public void onPlaying() {
-                                    mYouTubeVideoPlayListener.onYouTubeVideoPlaying();
-                                }
-
-                                @Override
-                                public void onPaused() {
-                                    mYouTubeVideoPlayListener.onYouTubeVideoPaused();
-                                }
-
-                                @Override
-                                public void onStopped() {
-                                    mYouTubeVideoPlayListener.onYouTubeVideoStopped();
-                                }
-
-                                @Override
-                                public void onBuffering(boolean b) {
-
-                                }
-
-                                @Override
-                                public void onSeekTo(int i) {
-
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onInitializationFailure(YouTubePlayer.Provider provider,
-                                                        YouTubeInitializationResult
-                                                                youTubeInitializationResult) {
-
-                    }
-                });
+                View youtubeView = LayoutInflater.from(context).inflate(
+                        R.layout.layout_youtube_thumbnail, null, false);
+                YouTubeFragment youTubeFragment = (YouTubeFragment) ((Activity) context)
+                        .getFragmentManager().findFragmentById(R.id.youtube_fragment);
+                youTubeFragment.setApiKey(YOUTUBE_API_KEY);
+                youTubeFragment.cueVideo(videoCode);
                 View topContainerView = stack.peek().view;
                 if (topContainerView instanceof LinearLayout) {
-                    ((LinearLayout) topContainerView).addView(youTubePlayerView);
+                    ((LinearLayout) topContainerView).addView(youtubeView);
                 }
             } else {
                 Styler.IFrameTagView iFrameWebView = styler.new IFrameTagView(
