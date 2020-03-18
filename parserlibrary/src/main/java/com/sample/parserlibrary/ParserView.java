@@ -18,9 +18,16 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class ParserView extends LinearLayout {
+
+    public interface OnParsingCompletedListener {
+        void onParsingCompleted(boolean success, ParserView parserView);
+    }
 
     final String YOUTUBE_API_KEY = "AIzaSyDph-whisa8me0VEKQ0yUgbO5haK_VRjv0";
 
@@ -36,8 +43,20 @@ public class ParserView extends LinearLayout {
     SpannableStringBuilder text = new SpannableStringBuilder("");
     int text_len = 0;
     char lastCharacter = 0;
-    //String mTopicURL = "", mSubjectURL = null, pagerPrevURL = null, pagerNextURL = null;
+    String baseUrl = "", endPoint = null;
+    // String pagerPrevURL = null, pagerNextURL = null;
     YouTubeVideoPlayListener mYouTubeVideoPlayListener = null;
+    private Set<OnParsingCompletedListener> listeners;
+    private List<String> imageUrls = new ArrayList<>();
+
+    public void registerOnParsingCompletedListener(OnParsingCompletedListener listener) {
+        if (listeners == null) listeners = new HashSet<>();
+        listeners.add(listener);
+    }
+
+    public void unRegisterOnParsingCompletedListener(OnParsingCompletedListener listener) {
+        listeners.remove(listener);
+    }
 
     public ParserView(Context context) {
         super(context);
@@ -79,10 +98,14 @@ public class ParserView extends LinearLayout {
         mYouTubeVideoPlayListener = youtubeVideoPlayListener;
     }
 
-    public void loadURLContent(String subjectURL, String topicURL, String content,
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void loadURLContent(String baseUrl, String endPoint, String content,
                                String initialTag, String textToStartFrom) {
-        //this.mSubjectURL = subjectURL;
-        //this.mTopicURL = topicURL;
+        this.baseUrl = baseUrl;
+        this.endPoint = endPoint;
         if (initialTag == null) {
             this.initialTag = "body";
         } else {
@@ -96,21 +119,27 @@ public class ParserView extends LinearLayout {
         parseHTML(content);
     }
 
-    /*public String getSubjectURL() {
-        return mSubjectURL;
+    public String getBaseURL() {
+        return baseUrl;
     }
 
-    public String getTopicURL() {
-        return mTopicURL;
-    }*/
+    public String getEndPoint() {
+        return endPoint;
+    }
 
     public void clear() {
+        if (imageUrls != null) imageUrls.clear();
         this.removeAllViewsInLayout();
         this.removeAllViews();
     }
 
     public void parseHTML(String htmlText) {
         if (htmlText == null) {
+            if (listeners != null) {
+                for (OnParsingCompletedListener listener : listeners) {
+                    listener.onParsingCompleted(false, this);
+                }
+            }
             return;
         }
         //int start = htmlText.indexOf(textToStartFrom);
@@ -333,6 +362,11 @@ public class ParserView extends LinearLayout {
                 break;
             }
             index++;
+        }
+        if (listeners != null) {
+            for (OnParsingCompletedListener listener : listeners) {
+                listener.onParsingCompleted(true, this);
+            }
         }
     }
 
@@ -560,6 +594,14 @@ public class ParserView extends LinearLayout {
             stack.push(new Tag("", null, textView));
         } else if (tagName.equals("img")) {
             insertTextView();
+            for (TagAttribute attribute : attributes) {
+                if ("src".equals(attribute.getAttributeName())) {
+                    if (!attribute.getAttributeValue().contains("http")) {
+                        attribute.setAttributeValue(baseUrl + "/" + attribute.getAttributeValue());
+                    }
+                    imageUrls.add(attribute.getAttributeValue());
+                }
+            }
             final Styler.ImageTagView imageView =
                     styler.new ImageTagView(context, attributes/*, mSubjectURL*/);
             imageView.setLayoutParams(
